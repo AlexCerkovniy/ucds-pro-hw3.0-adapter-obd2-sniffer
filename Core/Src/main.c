@@ -76,6 +76,18 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	}
 }
 
+void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan){
+	LED_RED_OFF();
+}
+
+void HAL_CAN_TxMailbox1CompleteCallback(CAN_HandleTypeDef *hcan){
+	LED_RED_OFF();
+}
+
+void HAL_CAN_TxMailbox2CompleteCallback(CAN_HandleTypeDef *hcan){
+	LED_RED_OFF();
+}
+
 void SysTick_Interrupt(void){
 	if(pids_request_timer){
 		pids_request_timer--;
@@ -118,9 +130,7 @@ int main(void)
   MX_ADC1_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-  LED_RED_ON();
-  LED_GREEN_ON();
-  LED_BLUE_ON();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

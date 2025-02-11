@@ -41,6 +41,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "gpio.h"
 #include "console.h"
 #include "obd2.h"
 /* USER CODE END Includes */

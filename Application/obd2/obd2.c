@@ -101,6 +101,7 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 
 void obd2_request_pid(uint8_t pid){
 	// CAN Data Transmit Setup
+	HAL_StatusTypeDef	TxStatus = HAL_OK;
 	CAN_TxHeaderTypeDef	TxHeader;
 	uint32_t			TxMailbox;
 	uint8_t				TxData[8];
@@ -109,6 +110,7 @@ void obd2_request_pid(uint8_t pid){
 	TxHeader.StdId = 0x7DF;
 	TxHeader.RTR = CAN_RTR_DATA;
 	TxHeader.DLC = 8;
+	TxHeader.TransmitGlobalTime = DISABLE;
 	TxData[0] = 0x02;
 	TxData[1] = 0x01;
 	TxData[2] = pid;
@@ -118,11 +120,19 @@ void obd2_request_pid(uint8_t pid){
 	TxData[6] = 0x55;
 	TxData[7] = 0x55;
 
-	console_print("%.8lu TX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
-			HAL_GetTick(), TxHeader.StdId, TxHeader.DLC,
-			TxData[0], TxData[1], TxData[2], TxData[3], TxData[4], TxData[5], TxData[6], TxData[7]);
+	TxStatus = HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox);
+	if(TxStatus == HAL_OK){
+		LED_RED_ON();
 
-	HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox);
+		console_print("%.8lu TX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
+					HAL_GetTick(), TxHeader.StdId, TxHeader.DLC,
+					TxData[0], TxData[1], TxData[2], TxData[3], TxData[4], TxData[5], TxData[6], TxData[7]);
+	}
+	else{
+		console_print("%.8lu TX ERROR! CODE=0x%.8X\r\n", HAL_GetTick(), HAL_CAN_GetError(&hcan2));
+		HAL_CAN_ResetError(&hcan2);
+	}
+
 	last_request_time = HAL_GetTick();
 }
 
