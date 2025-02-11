@@ -99,7 +99,7 @@ void SysTick_Interrupt(void);
 #define MS_CAN1_TX_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define PIDS_UPDATE_PERIOD				(250)
+#define PIDS_UPDATE_PERIOD				(500)
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

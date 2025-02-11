@@ -140,11 +140,8 @@ int main(void)
 	  if(pids_request_timer == 0){
 		  pids_request_timer = PIDS_UPDATE_PERIOD;
 		  obd2_request_pid(PID_COOLANT_TEMP);
-		  console_print("CAN_STATE=%u\r\n", (uint16_t)HAL_CAN_GetState(&hcan2));
+		  //console_print("CAN_STATE=%u\r\n", (uint16_t)HAL_CAN_GetState(&hcan2));
 	  }
-
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
