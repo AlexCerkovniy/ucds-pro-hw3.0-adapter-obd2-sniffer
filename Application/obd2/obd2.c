@@ -96,11 +96,12 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 			value = data1;
 	}
 
+	console_print("VAL=%d\r\n", value);
+
 	return value;
 }
 
 void obd2_request_pid(uint8_t pid){
-	// CAN Data Transmit Setup
 	HAL_StatusTypeDef	TxStatus = HAL_OK;
 	CAN_TxHeaderTypeDef	TxHeader;
 	uint32_t			TxMailbox;
