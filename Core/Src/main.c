@@ -47,7 +47,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint32_t pids_request_timer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,6 +58,29 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// Receive CAN packet
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+	uint8_t RxData[8];
+	CAN_RxHeaderTypeDef	RxHeader;
+
+	HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxHeader, RxData);
+
+	console_print("%.8lu RX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
+				HAL_GetTick(), RxHeader.StdId, RxHeader.DLC,
+				RxData[0], RxData[1], RxData[2], RxData[3], RxData[4], RxData[5], RxData[6], RxData[7]);
+
+	// Check Engine Response ID
+	if (RxHeader.StdId == 0x7E8) {
+		obd2_parse_packet(RxData, GET_SIZE(RxData));
+	}
+}
+
+void SysTick_Interrupt(void){
+	if(pids_request_timer){
+		pids_request_timer--;
+	}
+}
 
 /* USER CODE END 0 */
 
@@ -90,19 +113,25 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_CAN1_Init();
   MX_CAN2_Init();
   MX_USB_DEVICE_Init();
   MX_ADC1_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-
+  LED_RED_ON();
+  LED_GREEN_ON();
+  LED_BLUE_ON();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(pids_request_timer == 0){
+		  pids_request_timer = PIDS_UPDATE_PERIOD;
+		  obd2_request_pid(PID_COOLANT_TEMP);
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

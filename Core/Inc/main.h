@@ -41,7 +41,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "console.h"
+#include "obd2.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -56,14 +57,14 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
+#define GET_SIZE(arr) 			(sizeof(arr) / sizeof((arr)[0]))
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void SysTick_Interrupt(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -97,7 +98,7 @@ void Error_Handler(void);
 #define MS_CAN1_TX_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define PIDS_UPDATE_PERIOD				(250)
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

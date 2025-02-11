@@ -33,7 +33,12 @@ extern "C" {
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
-
+#define LED_RED_ON()			LL_GPIO_ResetOutputPin(LED_RED_GPIO_Port, LED_RED_Pin)
+#define LED_RED_OFF()			LL_GPIO_SetOutputPin(LED_RED_GPIO_Port, LED_RED_Pin)
+#define LED_GREEN_ON()			LL_GPIO_ResetOutputPin(LED_GREEN_GPIO_Port, LED_GREEN_Pin)
+#define LED_GREEN_OFF()			LL_GPIO_SetOutputPin(LED_GREEN_GPIO_Port, LED_GREEN_Pin)
+#define LED_BLUE_ON()			LL_GPIO_ResetOutputPin(LED_BLUE_GPIO_Port, LED_BLUE_Pin)
+#define LED_BLUE_OFF()			LL_GPIO_SetOutputPin(LED_BLUE_GPIO_Port, LED_BLUE_Pin)
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);
