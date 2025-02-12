@@ -96,7 +96,7 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 			value = data1;
 	}
 
-	console_print("VAL=%d\r\n", value);
+	console_print("PID=%.2X VAL=%d\r\n", pid, value);
 
 	return value;
 }
