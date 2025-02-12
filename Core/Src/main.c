@@ -120,7 +120,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  console_init();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -130,7 +130,11 @@ int main(void)
   MX_ADC1_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-
+  int32_t temperature = 0;
+  int32_t acc = 0;
+  adc_measure(ADC_TEMPERATURE_C, &temperature);
+  adc_measure(ADC_VEHICLE_VOLTAGE, &acc);
+  console_print("Device started! TEMP=%dC, VREF=%dmV, ACC=%dmV\r\n", temperature, adc_get_measured_vref(), acc);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -145,6 +149,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  console_main();
 	  HAL_IWDG_Refresh(&hiwdg);
   }
   /* USER CODE END 3 */

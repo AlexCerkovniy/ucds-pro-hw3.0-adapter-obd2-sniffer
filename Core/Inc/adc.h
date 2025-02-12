@@ -32,16 +32,19 @@ extern "C" {
 
 /* USER CODE END Includes */
 
-extern ADC_HandleTypeDef hadc1;
-
 /* USER CODE BEGIN Private defines */
-
+typedef enum {
+    ADC_VREF_MV = 0,
+    ADC_TEMPERATURE_C,
+    ADC_VEHICLE_VOLTAGE
+} adc_measure_parameter;
 /* USER CODE END Private defines */
 
 void MX_ADC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+int32_t adc_measure(adc_measure_parameter parameter, int32_t *value);
+int32_t adc_get_measured_vref(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
