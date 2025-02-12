@@ -29,7 +29,7 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 		case PID_INTAKE_TEMP:
 		case PID_AMBIENT_TEMP:
 		case PID_ENGINE_OIL_TEMP:
-			value = data1 - 40;
+			value = (int16_t)data1 - 40;
 			break;
 		case PID_THROTTLE:
 		case PID_COMMANDED_EGR:
