@@ -61,36 +61,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-// Receive CAN packet
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
-{
-	uint8_t RxData[8];
-	CAN_RxHeaderTypeDef	RxHeader;
-
-	HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxHeader, RxData);
-
-	console_print("%.8lu RX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
-				HAL_GetTick(), RxHeader.StdId, RxHeader.DLC,
-				RxData[0], RxData[1], RxData[2], RxData[3], RxData[4], RxData[5], RxData[6], RxData[7]);
-
-	// Check Engine Response ID
-	if (RxHeader.StdId == 0x7E8) {
-		obd2_parse_packet(RxData, GET_SIZE(RxData));
-	}
-}
-
-void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_RED_OFF();
-}
-
-void HAL_CAN_TxMailbox1CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_RED_OFF();
-}
-
-void HAL_CAN_TxMailbox2CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_RED_OFF();
-}
-
 void SysTick_Interrupt(void){
 	if(pids_request_timer){
 		pids_request_timer--;
