@@ -159,6 +159,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	CAN_RxHeaderTypeDef	RxHeader;
 
 	HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxHeader, RxData);
+	Can_LedBlinkOnPacketReceived();
 
 	console_print("%.8lu RX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
 				HAL_GetTick(), RxHeader.StdId, RxHeader.DLC,
@@ -177,14 +178,14 @@ void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan){
 }
 
 void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_GREEN_OFF();
+	console_print("%.8lu TX OK!\r\n");
 }
 
 void HAL_CAN_TxMailbox1CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_GREEN_OFF();
+	console_print("%.8lu TX OK!\r\n");
 }
 
 void HAL_CAN_TxMailbox2CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_GREEN_OFF();
+	console_print("%.8lu TX OK!\r\n");
 }
 /* USER CODE END 1 */

@@ -67,6 +67,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+void Can_LedBlinkOnPacketReceived(void);
 void Error_LedShortBlink(void);
 void SysTick_Interrupt(void);
 /* USER CODE END EFP */

@@ -52,6 +52,7 @@ uint32_t pids_request_timer = 0;
 uint32_t pid_to_request = 0;
 
 uint32_t error_led_timer = 0;
+uint32_t can_packet_rx_led_timer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,8 +74,32 @@ void SysTick_Interrupt(void){
 			LED_RED_OFF();
 		}
 	}
+
+	if(can_packet_rx_led_timer){
+		can_packet_rx_led_timer--;
+		if(can_packet_rx_led_timer == 0){
+			LED_GREEN_OFF();
+		}
+	}
 }
 
+void Can_LedBlinkOnPacketReceived(void){
+	if(can_packet_rx_led_timer){
+		return;
+	}
+
+	can_packet_rx_led_timer = 50;
+	LED_GREEN_ON();
+}
+
+void Error_LedShortBlink(void){
+	if(error_led_timer){
+		return;
+	}
+
+	error_led_timer = 50;
+	LED_RED_ON();
+}
 /* USER CODE END 0 */
 
 /**
@@ -196,14 +221,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void Error_LedShortBlink(void){
-	if(error_led_timer){
-		return;
-	}
 
-	error_led_timer = 50;
-	LED_RED_ON();
-}
 /* USER CODE END 4 */
 
 /**
