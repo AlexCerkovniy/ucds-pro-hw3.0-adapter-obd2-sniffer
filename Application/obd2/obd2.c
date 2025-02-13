@@ -112,9 +112,9 @@ void obd2_request_pid(uint8_t pid){
 	TxHeader.RTR = CAN_RTR_DATA;
 	TxHeader.DLC = 8;
 	TxHeader.TransmitGlobalTime = DISABLE;
-	TxData[0] = 0x02;
-	TxData[1] = 0x01;
-	TxData[2] = pid;
+	TxData[0] = 0x02;	// Payload length
+	TxData[1] = 0x01;	// Standart request
+	TxData[2] = pid;	// PID field
 	TxData[3] = 0x55;
 	TxData[4] = 0x55;
 	TxData[5] = 0x55;
