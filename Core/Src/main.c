@@ -48,6 +48,9 @@
 
 /* USER CODE BEGIN PV */
 uint32_t pids_request_timer = 0;
+
+uint32_t pid_to_request = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -141,10 +144,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(pids_request_timer == 0){
-		  pids_request_timer = PIDS_UPDATE_PERIOD;
-		  obd2_request_pid(PID_COOLANT_TEMP);
-		  //console_print("CAN_STATE=%u\r\n", (uint16_t)HAL_CAN_GetState(&hcan2));
+//	  if(pids_request_timer == 0){
+//		  pids_request_timer = PIDS_UPDATE_PERIOD;
+//		  obd2_request_pid(PID_COOLANT_TEMP);
+//		  //console_print("CAN_STATE=%u\r\n", (uint16_t)HAL_CAN_GetState(&hcan2));
+//	  }
+
+	  if(pid_to_request){
+		  obd2_request_pid(pid_to_request);
+		  console_print("CAN_STATE=%u\r\n", (uint16_t)HAL_CAN_GetState(&hcan2));
+		  pid_to_request = 0;
 	  }
     /* USER CODE END WHILE */
 

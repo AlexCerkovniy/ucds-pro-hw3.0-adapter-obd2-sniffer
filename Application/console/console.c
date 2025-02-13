@@ -1,6 +1,7 @@
 #include "console.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /* Platform includes */
 #include "main.h"
@@ -9,6 +10,8 @@
 
 fast_fifo_t my_fifo;
 uint8_t my_fifo_buffer[2048];
+
+extern uint32_t pid_to_request;
 
 void console_init(void){
 	fast_fifo_init(&my_fifo, my_fifo_buffer, sizeof(my_fifo_buffer)/sizeof(my_fifo_buffer[0]));
@@ -26,6 +29,18 @@ void console_print(char *fmt, ...){
   if(length){
 	fast_fifo_write(&my_fifo, (uint8_t *)buffer, length);
   }
+}
+
+void console_input(uint8_t *buffer, uint32_t length){
+	int value = atoi(buffer);
+
+	if(value){
+		if(value > 255){
+			value = 255;
+		}
+
+		pid_to_request = value;
+	}
 }
 
 void console_main(void){
