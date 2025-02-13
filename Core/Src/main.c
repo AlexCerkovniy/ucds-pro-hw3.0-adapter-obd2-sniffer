@@ -51,6 +51,7 @@ uint32_t pids_request_timer = 0;
 
 uint32_t pid_to_request = 0;
 
+uint32_t error_led_timer = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,6 +65,13 @@ void SystemClock_Config(void);
 void SysTick_Interrupt(void){
 	if(pids_request_timer){
 		pids_request_timer--;
+	}
+
+	if(error_led_timer){
+		error_led_timer--;
+		if(error_led_timer == 0){
+			LED_RED_OFF();
+		}
 	}
 }
 
@@ -188,7 +196,14 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void Error_LedShortBlink(void){
+	if(error_led_timer){
+		return;
+	}
 
+	error_led_timer = 50;
+	LED_RED_ON();
+}
 /* USER CODE END 4 */
 
 /**

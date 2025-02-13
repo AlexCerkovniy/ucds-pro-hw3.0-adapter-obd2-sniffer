@@ -76,7 +76,10 @@ void MX_CAN2_Init(void)
 	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_TX_MAILBOX_EMPTY);
 
 	/* Enable error ISR's */
-	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_ERROR_WARNING | CAN_IT_ERROR_PASSIVE | CAN_IT_BUSOFF | CAN_IT_LAST_ERROR_CODE | CAN_IT_ERROR);
+	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_OVERRUN | CAN_IT_RX_FIFO1_OVERRUN |
+										 CAN_IT_ERROR_WARNING | CAN_IT_ERROR_PASSIVE |
+										 CAN_IT_BUSOFF | CAN_IT_LAST_ERROR_CODE |
+										 CAN_IT_ERROR);
 
 	HS_CAN_TRANSCEIVER_ENABLE();
   /* USER CODE END CAN2_Init 2 */
@@ -170,17 +173,18 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan){
 	console_print("%.8lu CAN ERROR=0x%.8X\r\n", HAL_GetTick(), HAL_CAN_GetError(&hcan2));
 	HAL_CAN_ResetError(&hcan2);
+	Error_LedShortBlink();
 }
 
 void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_RED_OFF();
+	LED_GREEN_OFF();
 }
 
 void HAL_CAN_TxMailbox1CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_RED_OFF();
+	LED_GREEN_OFF();
 }
 
 void HAL_CAN_TxMailbox2CompleteCallback(CAN_HandleTypeDef *hcan){
-	LED_RED_OFF();
+	LED_GREEN_OFF();
 }
 /* USER CODE END 1 */

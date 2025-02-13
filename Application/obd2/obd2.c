@@ -123,7 +123,7 @@ void obd2_request_pid(uint8_t pid){
 
 	TxStatus = HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox);
 	if(TxStatus == HAL_OK){
-		LED_RED_ON();
+		LED_GREEN_OFF();
 
 		console_print("%.8lu TX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
 					HAL_GetTick(), TxHeader.StdId, TxHeader.DLC,
