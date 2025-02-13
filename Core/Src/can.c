@@ -31,7 +31,9 @@ void MX_CAN2_Init(void)
 {
 
   /* USER CODE BEGIN CAN2_Init 0 */
-
+  MS_CAN_TRANSCEIVER_DISABLE();
+  MM_CAN_TRANSCEIVER_DISABLE();
+  HS_CAN_TRANSCEIVER_DISABLE();
   /* USER CODE END CAN2_Init 0 */
 
   /* USER CODE BEGIN CAN2_Init 1 */
@@ -69,6 +71,8 @@ void MX_CAN2_Init(void)
 	HAL_CAN_ConfigFilter(&hcan2, &canFilterConfig);
 	HAL_CAN_Start(&hcan2);
 	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
+
+	HS_CAN_TRANSCEIVER_ENABLE();
   /* USER CODE END CAN2_Init 2 */
 
 }
