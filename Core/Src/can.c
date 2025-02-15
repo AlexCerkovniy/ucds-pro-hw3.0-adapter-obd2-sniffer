@@ -59,7 +59,7 @@ void MX_CAN2_Init(void)
   /* USER CODE BEGIN CAN2_Init 2 */
   	CAN_FilterTypeDef canFilterConfig;
 
-	canFilterConfig.FilterBank = 0;
+	canFilterConfig.FilterBank = 15;
 	canFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
 	canFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
 	canFilterConfig.FilterIdHigh = 0x07E8 << 5; // Filter IDs from 0x7E8

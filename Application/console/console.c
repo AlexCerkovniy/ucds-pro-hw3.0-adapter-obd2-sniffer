@@ -27,7 +27,9 @@ void console_print(char *fmt, ...){
   va_end(args);
 
   if(length){
+	__disable_irq();
 	fast_fifo_write(&my_fifo, (uint8_t *)buffer, length);
+	__enable_irq();
   }
 }
 
@@ -55,7 +57,9 @@ void console_main(void){
 		}
 
 		/* Extract & send data from fifo */
+		__disable_irq();
 		fast_fifo_read(&my_fifo, send_buffer, &send_length);
+		__enable_irq();
 		CDC_Transmit_FS(send_buffer, (uint16_t)send_length);
 	}
 }
