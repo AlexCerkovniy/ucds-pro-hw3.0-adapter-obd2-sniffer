@@ -75,10 +75,15 @@ void MX_CAN2_Init(void)
 	/* Enable FIFO0 pending ISR and TX mailbox empty ISR */
 	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_TX_MAILBOX_EMPTY);
 
-	/* Enable error ISR's */
-	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_OVERRUN | CAN_IT_RX_FIFO1_OVERRUN |
-										 CAN_IT_ERROR_WARNING | CAN_IT_ERROR_PASSIVE |
-										 CAN_IT_BUSOFF | CAN_IT_LAST_ERROR_CODE |
+	/* Enable AUX & error ISR's */
+	HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_OVERRUN |
+										 CAN_IT_RX_FIFO0_FULL |
+										 CAN_IT_WAKEUP |
+										 CAN_IT_SLEEP_ACK |
+										 CAN_IT_ERROR_WARNING |
+										 CAN_IT_ERROR_PASSIVE |
+										 CAN_IT_BUSOFF |
+										 CAN_IT_LAST_ERROR_CODE |
 										 CAN_IT_ERROR);
 
 	HS_CAN_TRANSCEIVER_ENABLE();
@@ -171,6 +176,25 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	}
 }
 
+void HAL_CAN_RxFifo0FullCallback(CAN_HandleTypeDef *hcan){
+	console_print("%.8lu RX (FIFO=0) Full!\r\n", HAL_GetTick());
+}
+
+void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan){
+	uint8_t RxData[8];
+	CAN_RxHeaderTypeDef	RxHeader;
+
+	HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO1, &RxHeader, RxData);
+
+	console_print("%.8lu RX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
+					HAL_GetTick(), RxHeader.StdId, RxHeader.DLC,
+					RxData[0], RxData[1], RxData[2], RxData[3], RxData[4], RxData[5], RxData[6], RxData[7]);
+}
+
+void HAL_CAN_RxFifo1FullCallback(CAN_HandleTypeDef *hcan){
+	console_print("%.8lu RX (FIFO=1) Full!\r\n", HAL_GetTick());
+}
+
 void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan){
 	console_print("%.8lu CAN ERROR=0x%.8X\r\n", HAL_GetTick(), HAL_CAN_GetError(&hcan2));
 	HAL_CAN_ResetError(&hcan2);
@@ -178,14 +202,35 @@ void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan){
 }
 
 void HAL_CAN_TxMailbox0CompleteCallback(CAN_HandleTypeDef *hcan){
-	console_print("%.8lu TX OK!\r\n");
+	console_print("%.8lu TX (MBX=0) OK!\r\n", HAL_GetTick());
 }
 
 void HAL_CAN_TxMailbox1CompleteCallback(CAN_HandleTypeDef *hcan){
-	console_print("%.8lu TX OK!\r\n");
+	console_print("%.8lu TX (MBX=1) OK!\r\n", HAL_GetTick());
 }
 
 void HAL_CAN_TxMailbox2CompleteCallback(CAN_HandleTypeDef *hcan){
-	console_print("%.8lu TX OK!\r\n");
+	console_print("%.8lu TX (MBX=2) OK!\r\n", HAL_GetTick());
 }
+
+void HAL_CAN_TxMailbox0AbortCallback(CAN_HandleTypeDef *hcan){
+	console_print("%.8lu TX (MBX=0) Abort!\r\n", HAL_GetTick());
+}
+
+void HAL_CAN_TxMailbox1AbortCallback(CAN_HandleTypeDef *hcan){
+	console_print("%.8lu TX (MBX=1) Abort!\r\n", HAL_GetTick());
+}
+
+void HAL_CAN_TxMailbox2AbortCallback(CAN_HandleTypeDef *hcan){
+	console_print("%.8lu TX (MBX=2) Abort!\r\n", HAL_GetTick());
+}
+
+void HAL_CAN_SleepCallback(CAN_HandleTypeDef *hcan){
+	console_print("%.8lu Sleep Callback!\r\n", HAL_GetTick());
+}
+
+void HAL_CAN_WakeUpFromRxMsgCallback(CAN_HandleTypeDef *hcan){
+	console_print("%.8lu RX Wake-up Callback!\r\n", HAL_GetTick());
+}
+
 /* USER CODE END 1 */

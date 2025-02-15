@@ -155,7 +155,6 @@ int main(void)
 
 	  if(pid_to_request){
 		  obd2_request_pid(pid_to_request);
-		  console_print("CAN_STATE=%u\r\n", (uint16_t)HAL_CAN_GetState(&hcan2));
 		  pid_to_request = 0;
 	  }
     /* USER CODE END WHILE */
