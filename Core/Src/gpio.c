@@ -57,9 +57,6 @@ void MX_GPIO_Init(void)
                           |MM_STB_Pin|HS_STB_Pin);
 
   /**/
-  LL_GPIO_ResetOutputPin(MM_CAN2_TX_GPIO_Port, MM_CAN2_TX_Pin);
-
-  /**/
   GPIO_InitStruct.Pin = LL_GPIO_PIN_13|LL_GPIO_PIN_14|LL_GPIO_PIN_15|LL_GPIO_PIN_1
                           |LL_GPIO_PIN_2|LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_5
                           |LL_GPIO_PIN_6|LL_GPIO_PIN_7|LL_GPIO_PIN_8|LL_GPIO_PIN_9
@@ -76,7 +73,7 @@ void MX_GPIO_Init(void)
 
   /**/
   GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1|LL_GPIO_PIN_14|LL_GPIO_PIN_15
-                          |MS_CAN1_RX_Pin|MS_CAN1_TX_Pin;
+                          |MM_CAN2_RX_Pin|MM_CAN2_TX_Pin|MS_CAN1_RX_Pin|MS_CAN1_TX_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
   LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -97,18 +94,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
   LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-  /**/
-  GPIO_InitStruct.Pin = MM_CAN2_RX_Pin;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_FLOATING;
-  LL_GPIO_Init(MM_CAN2_RX_GPIO_Port, &GPIO_InitStruct);
-
-  /**/
-  GPIO_InitStruct.Pin = MM_CAN2_TX_Pin;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  LL_GPIO_Init(MM_CAN2_TX_GPIO_Port, &GPIO_InitStruct);
 
 }
 
