@@ -17,8 +17,7 @@ screen_object_t logo_screen = {
 };
 
 /* Private variables ---------------------------------------------------------------------------------------------- */
-uint16_t logo_show_timer_ms = 2000;
-bool dead_battery_show = true;
+uint16_t logo_show_timer_ms = 3000;
 
 char name_string[] = "OBD2 SCREEN";
 char description_string[] = "Ford Focus Club";

@@ -7,6 +7,56 @@
 extern CAN_HandleTypeDef hcan2; // CAN Data Transmit Setup
 static uint32_t last_request_time = 0;
 
+uint8_t pids_list[] = {
+		PID_COOLANT_TEMP,
+		PID_INTAKE_TEMP,
+		PID_INTAKE_MAP,
+		PID_RPM
+};
+
+obd2_pids_list_t obd2_list = {
+		.pids_list = pids_list,
+		.size = sizeof(pids_list)
+};
+
+uint8_t pid_request_index = 0;
+uint32_t pid_request_timer = 0;
+uint32_t pid_refresh_ticks = 250;
+
+int16_t coolant_temp = 0;
+int16_t intake_temp = 0;
+int16_t intake_map = 0;
+int16_t rpm = 0;
+
+void obd2_init(void){
+
+}
+
+void obd2_set_refresh_rate(uint32_t ticks){
+	if(ticks == 0){
+		ticks = 250;
+	}
+
+	pid_refresh_ticks = ticks;
+}
+
+void obd2_main(void){
+	if(obd2_list.size == 0){
+		return;
+	}
+
+	if(pid_request_timer == 0){
+		pid_request_timer = pid_refresh_ticks;
+		obd2_request_pid(obd2_list.pids_list[pid_request_index]);
+	}
+}
+
+void obd2_tick(uint32_t period){
+	if(pid_request_timer){
+		pid_request_timer--;
+	}
+}
+
 int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 {
 	//uint8_t length = RxData[0];
@@ -20,7 +70,7 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 	switch (pid) {
 		case PID_RPM:
 		case PID_EVAP_SYS_VAPOR_PRESSURE: // kPa
-			value = (data2 | data1 << 8) / 4;
+			value = (data2 | ((int16_t)data1 << 8)) / 4;
 			break;
 		case PID_FUEL_PRESSURE: // kPa
 			value = data1 * 3;
@@ -94,6 +144,16 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 			break;
 		default:
 			value = data1;
+	}
+
+	switch (pid) {
+		case PID_RPM: rpm = value; break;
+		case PID_COOLANT_TEMP: coolant_temp = value; break;
+		case PID_INTAKE_TEMP: intake_temp = value; break;
+		case PID_INTAKE_MAP: intake_map = value; break;
+
+		default:
+			break;
 	}
 
 	console_print("PID=%.2X VAL=%d\r\n", pid, value);

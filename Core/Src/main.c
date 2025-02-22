@@ -48,12 +48,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint32_t pids_request_timer = 0;
-
-uint32_t pid_to_request = 0;
-
 uint32_t error_led_timer = 0;
 uint32_t can_packet_rx_led_timer = 0;
+uint32_t pid_to_request = 0;
+
+#define BATTERY_VOLTAGE_UPDATE_PERIOD 			(500)
+int32_t temperature = 0;
+int32_t battery_voltage_mv = 0;
+uint32_t battery_voltage_update_timer = 0;
 
 gfx8_display_driver_t st7565_driver = {
 		.width = ST7565_WIDTH, .height = ST7565_HEIGHT,
@@ -77,15 +79,15 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void SysTick_Interrupt(void){
-	if(pids_request_timer){
-		pids_request_timer--;
-	}
-
 	if(error_led_timer){
 		error_led_timer--;
 		if(error_led_timer == 0){
 			LED_RED_OFF();
 		}
+	}
+
+	if(battery_voltage_update_timer){
+		battery_voltage_update_timer--;
 	}
 
 	if(can_packet_rx_led_timer){
@@ -95,6 +97,7 @@ void SysTick_Interrupt(void){
 		}
 	}
 
+	obd2_tick(1);
 	SCREEN_Tick(1);
 }
 
@@ -134,8 +137,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  int32_t temperature = 0;
-  int32_t acc = 0;
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -154,6 +156,9 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
+  obd2_init();
+  obd2_set_refresh_rate(250);
+
   /* Initialize ST7565 display */
 	G8Lib_Init(&st7565_driver);
 	G8Lib_GetDisplayDrv()->set_backlight(false);
@@ -164,27 +169,29 @@ int main(void)
 	SCREEN_Set(&logo_screen);
 
 	adc_measure(ADC_TEMPERATURE_C, &temperature);
-	adc_measure(ADC_VEHICLE_VOLTAGE, &acc);
-	console_print("Device started! TEMP=%dC, VREF=%dmV, ACC=%dmV\r\n", temperature, adc_get_measured_vref(), acc);
+	adc_measure(ADC_VEHICLE_VOLTAGE, &battery_voltage_mv);
+	console_print("Device started! TEMP=%dC, VREF=%dmV, ACC=%dmV\r\n", temperature, adc_get_measured_vref(), battery_voltage_mv);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	  if(pids_request_timer == 0){
-//		  pids_request_timer = PIDS_UPDATE_PERIOD;
-//		  obd2_request_pid(PID_COOLANT_TEMP);
-//		  //console_print("CAN_STATE=%u\r\n", (uint16_t)HAL_CAN_GetState(&hcan2));
-//	  }
-
-	  if(pid_to_request){
-		  obd2_request_pid(pid_to_request);
-		  pid_to_request = 0;
-	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if(battery_voltage_update_timer == 0){
+		  battery_voltage_update_timer = BATTERY_VOLTAGE_UPDATE_PERIOD;
+		  adc_measure(ADC_VEHICLE_VOLTAGE, &battery_voltage_mv);
+		  SCREEN_Invalidate();
+	  }
+
+	  if(pid_to_request){
+		  pid_to_request = 0;
+		  obd2_request_pid(pid_to_request);
+	  }
+
+	  obd2_main();
 	  SCREEN_Main();
 	  console_main();
 	  HAL_IWDG_Refresh(&hiwdg);

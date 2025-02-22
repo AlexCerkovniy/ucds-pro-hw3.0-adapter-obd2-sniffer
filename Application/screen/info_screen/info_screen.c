@@ -19,6 +19,12 @@ screen_object_t info_screen = {
 /* Private variables ---------------------------------------------------------------------------------------------- */
 static char *header = "PARAMETERS";
 
+extern int32_t battery_voltage_mv;
+extern int16_t coolant_temp;
+extern int16_t intake_temp;
+extern int16_t intake_map;
+extern int16_t rpm;
+
 static void _Init(void){
 
 }
@@ -32,16 +38,19 @@ static void _Draw(void){
 
 	G8Lib_SetFont(font_6x8);
 	G8Lib_SetCursor(3, 14);
-	G8Lib_Print(GFX8_ADAPTIVE, "ECT:%dC", 0);
+	G8Lib_Print(GFX8_ADAPTIVE, "ECT:%dC", coolant_temp);
 
 	G8Lib_SetCursor(3, 24);
-	G8Lib_Print(GFX8_ADAPTIVE, "OIL:%dC", 0);
+	G8Lib_Print(GFX8_ADAPTIVE, "INTAKE:%dC", intake_temp);
 
 	G8Lib_SetCursor(3, 34);
-	G8Lib_Print(GFX8_ADAPTIVE, "RPM:%d", 0);
+	G8Lib_Print(GFX8_ADAPTIVE, "MAP:%dkPa", intake_map);
 
 	G8Lib_SetCursor(3, 44);
-	G8Lib_Print(GFX8_ADAPTIVE, "BAT:%u.%uV", 0, 0);
+	G8Lib_Print(GFX8_ADAPTIVE, "RPM:%d", rpm);
+
+	G8Lib_SetCursor(3, 54);
+	G8Lib_Print(GFX8_ADAPTIVE, "BAT:%u.%.2uV", battery_voltage_mv/1000, (battery_voltage_mv%1000)/10);
 
 	G8Lib_GetDisplayDrv()->draw();
 }
