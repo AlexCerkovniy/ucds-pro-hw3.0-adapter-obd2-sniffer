@@ -3,7 +3,7 @@
 /* Driver Configuration */
 #define ST7565_WIDTH                           (128)
 #define ST7565_HEIGHT                          (64)
-#define ST7565_STARTUP_CONTRAST                (41)
+#define ST7565_STARTUP_CONTRAST                (38)
 
 /* Flip display */
 //#define ST7565_FLIP

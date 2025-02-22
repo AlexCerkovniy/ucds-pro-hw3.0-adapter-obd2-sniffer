@@ -17,7 +17,7 @@ screen_object_t info_screen = {
 };
 
 /* Private variables ---------------------------------------------------------------------------------------------- */
-static char *header = "GENERAL INFO";
+static char *header = "PARAMETERS";
 
 static void _Init(void){
 
@@ -27,7 +27,7 @@ static void _Draw(void){
 	G8Lib_GetDisplayDrv()->clear();
 	G8Lib_SetFont(hunter_font_8x8);
 	G8Lib_Rect(0, 0, 128, 11, GFX8_SET);
-	G8Lib_SetCursor((G8Lib_GetDisplayDrv()->width - strlen(header) * G8Lib_GetFont()->width)/2 + 10, 2);
+	G8Lib_SetCursor((G8Lib_GetDisplayDrv()->width - strlen(header) * G8Lib_GetFont()->width)/2, 2);
 	G8Lib_String(header, GFX8_ADAPTIVE);
 	G8Lib_GetDisplayDrv()->draw();
 }

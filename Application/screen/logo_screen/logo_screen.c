@@ -21,7 +21,7 @@ uint16_t logo_show_timer_ms = 2000;
 bool dead_battery_show = true;
 
 char name_string[] = "OBD2 SCREEN";
-char description_string[] = "For Focus Club";
+char description_string[] = "Ford Focus Club";
 char manufacturer_string[] = "Made in Ukraine";
 char version_string[] = VERSION_STRING;
 
