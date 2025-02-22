@@ -5,7 +5,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 extern CAN_HandleTypeDef hcan2; // CAN Data Transmit Setup
-static uint32_t last_request_time = 0;
 
 uint8_t pids_list[] = {
 		PID_COOLANT_TEMP,
@@ -46,8 +45,9 @@ void obd2_main(void){
 	}
 
 	if(pid_request_timer == 0){
-		pid_request_timer = pid_refresh_ticks;
-		obd2_request_pid(obd2_list.pids_list[pid_request_index]);
+		if(obd2_request_pid(obd2_list.pids_list[pid_request_index]) == OBD_OK){
+			pid_request_timer = pid_refresh_ticks;
+		}
 	}
 }
 
@@ -156,33 +156,50 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 			break;
 	}
 
+	/* Go to next index */
+	if(obd2_list.pids_list[pid_request_index] == pid){
+		pid_request_index++;
+		if(pid_request_index >= obd2_list.size){
+			pid_request_index = 0;
+		}
+	}
+
 	console_print("PID=%.2X VAL=%d\r\n", pid, value);
 
 	return value;
 }
 
-void obd2_request_pid(uint8_t pid){
-	HAL_StatusTypeDef	TxStatus = HAL_OK;
-	CAN_TxHeaderTypeDef	TxHeader;
-	uint32_t			TxMailbox;
-	uint8_t				TxData[8];
+obd2_status_t obd2_request_pid(uint8_t pid){
+	obd2_status_t status = OBD_OK;
+	uint32_t TxMailbox;
 
-	TxHeader.IDE = CAN_ID_STD;
-	TxHeader.StdId = 0x7DF;
-	TxHeader.RTR = CAN_RTR_DATA;
-	TxHeader.DLC = 8;
-	TxHeader.TransmitGlobalTime = DISABLE;
-	TxData[0] = 0x02;	// Payload length
-	TxData[1] = 0x01;	// Standart request
-	TxData[2] = pid;	// PID field
-	TxData[3] = 0x55;
-	TxData[4] = 0x55;
-	TxData[5] = 0x55;
-	TxData[6] = 0x55;
-	TxData[7] = 0x55;
+	static CAN_TxHeaderTypeDef TxHeader = {
+			.IDE = CAN_ID_STD,
+			.StdId = 0x7DF,
+			.RTR = CAN_RTR_DATA,
+			.DLC = 8,
+			.TransmitGlobalTime = DISABLE
+	};
 
-	TxStatus = HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox);
-	if(TxStatus == HAL_OK){
+	static uint8_t TxData[8] = {
+			0x02, // Payload length
+			0x01, // Standart request
+			0x00, // PID field
+			0x55,
+			0x55,
+			0x55,
+			0x55,
+			0x55
+	};
+
+	if(HAL_CAN_GetTxMailboxesFreeLevel(&hcan2) == 0){
+		return OBD_BUSY;
+	}
+
+	/* Set PID */
+	TxData[2] = pid;
+
+	if(HAL_CAN_AddTxMessage(&hcan2, &TxHeader, TxData, &TxMailbox) == HAL_OK){
 		console_print("%.8lu TX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
 					HAL_GetTick(), TxHeader.StdId, TxHeader.DLC,
 					TxData[0], TxData[1], TxData[2], TxData[3], TxData[4], TxData[5], TxData[6], TxData[7]);
@@ -192,9 +209,5 @@ void obd2_request_pid(uint8_t pid){
 		HAL_CAN_ResetError(&hcan2);
 	}
 
-	last_request_time = HAL_GetTick();
-}
-
-uint32_t obd2_getLastRequestTime(){
-	return last_request_time;
+	return status;
 }
