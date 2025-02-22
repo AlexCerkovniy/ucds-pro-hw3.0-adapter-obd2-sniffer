@@ -45,8 +45,9 @@ void ST7565_PL_Backlight(bool state){
 
 uint8_t ST7565_PL_SPI_Transfer(uint8_t byte){
 	LL_SPI_TransmitData8(SPI1, byte);
-	while (LL_SPI_IsActiveFlag_TXE(SPI1) == 0){};
-    return 0;
+	while ((LL_SPI_IsActiveFlag_TXE(SPI1) == 0) || (LL_SPI_IsActiveFlag_RXNE(SPI1) == 0)){};
+	LL_SPI_ReceiveData8(SPI1);
+	return 0;
 }
 
 void ST7565_PL_Delay(uint32_t milliseconds){
