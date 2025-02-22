@@ -1,0 +1,13 @@
+/*
+ * malfunction_screen.h
+ *
+ *  Created on: Mar 6, 2024
+ *      Author: Alex
+ */
+
+#ifndef SCREEN_MALFUNCTION_SCREEN_MALFUNCTION_SCREEN_H_
+#define SCREEN_MALFUNCTION_SCREEN_MALFUNCTION_SCREEN_H_
+
+
+
+#endif /* SCREEN_MALFUNCTION_SCREEN_MALFUNCTION_SCREEN_H_ */

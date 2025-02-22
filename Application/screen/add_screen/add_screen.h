@@ -1,0 +1,7 @@
+#pragma once
+
+#define ADD_SCREEN_SELECT_DEVICE			(0)
+#define ADD_SCREEN_ADD_DEVICE				(1)
+#define ADD_SCREEN_ADD_DEVICE_DONE			(2)
+#define ADD_SCREEN_ADD_DEVICE_TIMEOUT		(3)
+#define ADD_SCREEN_ADD_DEVICE_CANCEL		(4)

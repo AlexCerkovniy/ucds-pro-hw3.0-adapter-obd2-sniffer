@@ -46,6 +46,10 @@ extern "C" {
 #include "console.h"
 #include "obd2.h"
 #include "fast_fifo.h"
+#include "st7565.h"
+#include "gfx8lib.h"
+#include "screen.h"
+#include "malfunction.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

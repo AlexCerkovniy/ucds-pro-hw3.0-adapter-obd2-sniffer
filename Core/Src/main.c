@@ -53,6 +53,18 @@ uint32_t pid_to_request = 0;
 
 uint32_t error_led_timer = 0;
 uint32_t can_packet_rx_led_timer = 0;
+
+gfx8_display_driver_t st7565_driver = {
+		.width = ST7565_WIDTH, .height = ST7565_HEIGHT,
+		.init = ST7565_Init,
+		.clear = ST7565_Clear,
+		.draw = ST7565_Update,
+		.get_buffer = ST7565_GetFramebuffer,
+		.set_backlight = ST7565_Backlight,
+		.get_backlight = ST7565_GetBacklightState,
+		.sleep = ST7565_Sleep
+};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -119,7 +131,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  int32_t temperature = 0;
+  int32_t acc = 0;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -136,11 +149,19 @@ int main(void)
   MX_ADC1_Init();
   MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-  int32_t temperature = 0;
-  int32_t acc = 0;
-  adc_measure(ADC_TEMPERATURE_C, &temperature);
-  adc_measure(ADC_VEHICLE_VOLTAGE, &acc);
-  console_print("Device started! TEMP=%dC, VREF=%dmV, ACC=%dmV\r\n", temperature, adc_get_measured_vref(), acc);
+
+  /* Initialize ST7565 display */
+	G8Lib_Init(&st7565_driver);
+	G8Lib_GetDisplayDrv()->set_backlight(false);
+	G8Lib_GetDisplayDrv()->sleep(false);
+
+	/* Start graphic application */
+	SCREEN_Init();
+	SCREEN_Set(&logo_screen);
+
+	adc_measure(ADC_TEMPERATURE_C, &temperature);
+	adc_measure(ADC_VEHICLE_VOLTAGE, &acc);
+	console_print("Device started! TEMP=%dC, VREF=%dmV, ACC=%dmV\r\n", temperature, adc_get_measured_vref(), acc);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -160,6 +181,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  SCREEN_Main();
 	  console_main();
 	  HAL_IWDG_Refresh(&hiwdg);
   }
