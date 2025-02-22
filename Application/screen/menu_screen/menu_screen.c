@@ -21,12 +21,9 @@ screen_object_t menu_screen = {
 
 /* Private variables ---------------------------------------------------------------------------------------------- */
 const char *menu_item_name[] = {
-  "ADD DEVICE",
-  "REPEATER INFO",
-  "DEVICE INFO",
+  "GENERAL INFO",
+  "TIRE PRESSURE",
   "SETTINGS",
-  "STATISTIC",
-  "GAMES",
   "ABOUT"
 };
 
@@ -98,7 +95,7 @@ static void _Data(uint8_t type, void *data){
 
 		case ENC_LONG_BTN_TYPE:
 		case EXIT_BTN_TYPE:
-			SCREEN_Set(&stats_screen);
+			SCREEN_Set(&info_screen);
 			break;
 
 		default:
@@ -112,9 +109,7 @@ static void menu_item_val_str_request(uint8_t item, char *str, uint8_t *length){
 
 static bool menu_item_select(uint8_t item){
 	switch(item){
-		case 0: SCREEN_Set(&add_screen); break;
-		case 1: SCREEN_Set(&radio_test_screen); break;
-		case 2: SCREEN_Set(&device_info_screen); break;
+		case 0: SCREEN_Set(&info_screen); break;
 
 		default:
 			break;

@@ -20,12 +20,9 @@ typedef struct{
 
 /* Screens */
 extern screen_object_t logo_screen;
-extern screen_object_t stats_screen;
-extern screen_object_t radio_test_screen;
 extern screen_object_t malfunction_screen;
 extern screen_object_t menu_screen;
-extern screen_object_t add_screen;
-extern screen_object_t device_info_screen;
+extern screen_object_t info_screen;
 
 void SCREEN_Init(void);
 void SCREEN_Main(void);

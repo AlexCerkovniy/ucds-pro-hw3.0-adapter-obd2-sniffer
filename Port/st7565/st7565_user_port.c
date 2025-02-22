@@ -51,5 +51,5 @@ uint8_t ST7565_PL_SPI_Transfer(uint8_t byte){
 }
 
 void ST7565_PL_Delay(uint32_t milliseconds){
-	delay(milliseconds);
+	HAL_Delay(milliseconds);
 }

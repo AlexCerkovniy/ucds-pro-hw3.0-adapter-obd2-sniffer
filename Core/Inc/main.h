@@ -38,6 +38,7 @@ extern "C" {
 #include "stm32f1xx_ll_utils.h"
 #include "stm32f1xx_ll_pwr.h"
 #include "stm32f1xx_ll_dma.h"
+#include "stm32f1xx_ll_spi.h"
 #include "stm32f1xx_ll_gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -79,6 +80,12 @@ void SysTick_Interrupt(void);
 /* Private defines -----------------------------------------------------------*/
 #define ACC_ADC_IN_Pin LL_GPIO_PIN_0
 #define ACC_ADC_IN_GPIO_Port GPIOC
+#define DISP_CS_Pin LL_GPIO_PIN_0
+#define DISP_CS_GPIO_Port GPIOA
+#define DISP_BCL_Pin LL_GPIO_PIN_2
+#define DISP_BCL_GPIO_Port GPIOA
+#define DISP_DC_Pin LL_GPIO_PIN_3
+#define DISP_DC_GPIO_Port GPIOA
 #define LED_RED_Pin LL_GPIO_PIN_2
 #define LED_RED_GPIO_Port GPIOB
 #define LED_BLUE_Pin LL_GPIO_PIN_10
@@ -89,6 +96,8 @@ void SysTick_Interrupt(void);
 #define HS_CAN2_RX_GPIO_Port GPIOB
 #define HS_CAN2_TX_Pin LL_GPIO_PIN_13
 #define HS_CAN2_TX_GPIO_Port GPIOB
+#define DISP_RST_Pin LL_GPIO_PIN_14
+#define DISP_RST_GPIO_Port GPIOB
 #define USB_SENSE_Pin LL_GPIO_PIN_9
 #define USB_SENSE_GPIO_Port GPIOA
 #define MS_STB_Pin LL_GPIO_PIN_3
