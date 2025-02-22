@@ -29,6 +29,20 @@ static void _Draw(void){
 	G8Lib_Rect(0, 0, 128, 11, GFX8_SET);
 	G8Lib_SetCursor((G8Lib_GetDisplayDrv()->width - strlen(header) * G8Lib_GetFont()->width)/2, 2);
 	G8Lib_String(header, GFX8_ADAPTIVE);
+
+	G8Lib_SetFont(font_6x8);
+	G8Lib_SetCursor(3, 14);
+	G8Lib_Print(GFX8_ADAPTIVE, "ECT:%dC", 0);
+
+	G8Lib_SetCursor(3, 24);
+	G8Lib_Print(GFX8_ADAPTIVE, "OIL:%dC", 0);
+
+	G8Lib_SetCursor(3, 34);
+	G8Lib_Print(GFX8_ADAPTIVE, "RPM:%d", 0);
+
+	G8Lib_SetCursor(3, 44);
+	G8Lib_Print(GFX8_ADAPTIVE, "BAT:%u.%uV", 0, 0);
+
 	G8Lib_GetDisplayDrv()->draw();
 }
 
