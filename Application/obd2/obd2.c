@@ -10,12 +10,15 @@ uint8_t pids_list[] = {
 		PID_COOLANT_TEMP,
 		PID_INTAKE_TEMP,
 		PID_INTAKE_MAP,
-		PID_RPM
+		PID_RPM,
+		PID_SPEED,
+		PID_FUEL_LEVEL,
+		PID_ENGINE_LOAD
 };
 
 obd2_pids_list_t obd2_list = {
 		.pids_list = pids_list,
-		.size = sizeof(pids_list)
+		.size = sizeof(pids_list)/sizeof(pids_list[0])
 };
 
 uint8_t pid_request_index = 0;
@@ -26,6 +29,9 @@ int16_t coolant_temp = 0;
 int16_t intake_temp = 0;
 int16_t intake_map = 0;
 int16_t rpm = 0;
+int16_t speed = 0;
+int16_t fuel_level = 0;
+int16_t engine_load = 0;
 
 void obd2_init(void){
 
@@ -96,7 +102,7 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 		case PID_ABSOLUTE_ENGINE_LOAD:
 		case PID_ETHANOL_FUEL:
 		case PID_HYBRID_BATTERY_PERCENTAGE:
-			value = data1 * 100 / 255;
+			value = (int16_t)data1 * 100 / 255;
 			break;
 		case PID_MAF_FLOW: // grams/sec
 			value = (data2 | data1 << 8) / 100;
@@ -151,6 +157,8 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 		case PID_COOLANT_TEMP: coolant_temp = value; break;
 		case PID_INTAKE_TEMP: intake_temp = value; break;
 		case PID_INTAKE_MAP: intake_map = value; break;
+		case PID_FUEL_LEVEL: fuel_level = value; break;
+		case PID_ENGINE_LOAD: engine_load = value; break;
 
 		default:
 			break;

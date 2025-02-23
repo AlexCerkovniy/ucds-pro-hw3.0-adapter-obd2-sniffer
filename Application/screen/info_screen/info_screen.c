@@ -17,13 +17,16 @@ screen_object_t info_screen = {
 };
 
 /* Private variables ---------------------------------------------------------------------------------------------- */
-static char *header = "PARAMETERS";
+static char *header = "INFO";
 
 extern int32_t battery_voltage_mv;
 extern int16_t coolant_temp;
 extern int16_t intake_temp;
 extern int16_t intake_map;
 extern int16_t rpm;
+extern int16_t speed;
+extern int16_t fuel_level;
+extern int16_t engine_load;
 
 static void _Init(void){
 
@@ -33,24 +36,54 @@ static void _Draw(void){
 	G8Lib_GetDisplayDrv()->clear();
 	G8Lib_SetFont(hunter_font_8x8);
 	G8Lib_Rect(0, 0, 128, 11, GFX8_SET);
-	G8Lib_SetCursor((G8Lib_GetDisplayDrv()->width - strlen(header) * G8Lib_GetFont()->width)/2, 2);
+	G8Lib_SetCursor(36, 2);
 	G8Lib_String(header, GFX8_ADAPTIVE);
 
+	G8Lib_SetCursor(91, 2);
+	if(battery_voltage_mv < 10000) G8Lib_SetCursor(99, 2);
+	G8Lib_Print(GFX8_ADAPTIVE, "%u.", battery_voltage_mv/1000);
+	G8Lib_SetCursor(111, 2);
+	G8Lib_Print(GFX8_ADAPTIVE, "%dV", (battery_voltage_mv%1000)/100);
+
 	G8Lib_SetFont(font_6x8);
-	G8Lib_SetCursor(3, 14);
+	G8Lib_SetCursor(2, 14);
 	G8Lib_Print(GFX8_ADAPTIVE, "ECT:%dC", coolant_temp);
 
-	G8Lib_SetCursor(3, 24);
-	G8Lib_Print(GFX8_ADAPTIVE, "INTAKE:%dC", intake_temp);
+	G8Lib_SetCursor(2, 24);
+	G8Lib_Print(GFX8_ADAPTIVE, "INT:%dC", intake_temp);
 
-	G8Lib_SetCursor(3, 34);
+	G8Lib_SetCursor(2, 34);
 	G8Lib_Print(GFX8_ADAPTIVE, "MAP:%dkPa", intake_map);
 
-	G8Lib_SetCursor(3, 44);
-	G8Lib_Print(GFX8_ADAPTIVE, "RPM:%d", rpm);
+	G8Lib_SetCursor(2, 44);
+	G8Lib_Print(GFX8_ADAPTIVE, "FUEL:%d%%", fuel_level);
 
-	G8Lib_SetCursor(3, 54);
-	G8Lib_Print(GFX8_ADAPTIVE, "BAT:%u.%.2uV", battery_voltage_mv/1000, (battery_voltage_mv%1000)/10);
+	G8Lib_SetCursor(2, 54);
+	G8Lib_Print(GFX8_ADAPTIVE, "LOAD:%d%%", engine_load);
+
+	speed = 199;
+
+	G8Lib_SetFont(font_6x8);
+	G8Lib_SetCursor(84, 15);
+	G8Lib_String("SPEED", GFX8_ADAPTIVE);
+	G8Lib_SetFont(pixel_operator_bold_8x16);
+	if(speed < 10) G8Lib_SetCursor(95, 21);
+	else if(speed < 100) G8Lib_SetCursor(91, 21);
+	else G8Lib_SetCursor(87, 21);
+	G8Lib_Print(GFX8_ADAPTIVE, "%d", speed);
+
+	rpm = 1222;
+
+	G8Lib_SetFont(font_6x8);
+	G8Lib_SetCursor(90, 40);
+	G8Lib_String("RPM", GFX8_ADAPTIVE);
+	G8Lib_SetFont(pixel_operator_bold_8x16);
+	if(speed < 10) G8Lib_SetCursor(95, 46);
+	else if(speed < 100) G8Lib_SetCursor(91, 46);
+	else if(rpm < 1000) G8Lib_SetCursor(87, 46);
+	else G8Lib_SetCursor(83, 46);
+	G8Lib_Print(GFX8_ADAPTIVE, "%d", rpm);
+
 
 	G8Lib_GetDisplayDrv()->draw();
 }
