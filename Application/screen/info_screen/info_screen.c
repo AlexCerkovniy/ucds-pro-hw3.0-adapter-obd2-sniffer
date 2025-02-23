@@ -61,8 +61,6 @@ static void _Draw(void){
 	G8Lib_SetCursor(2, 54);
 	G8Lib_Print(GFX8_ADAPTIVE, "LOAD:%d%%", engine_load);
 
-	speed = 199;
-
 	G8Lib_SetFont(font_6x8);
 	G8Lib_SetCursor(84, 15);
 	G8Lib_String("SPEED", GFX8_ADAPTIVE);
@@ -71,8 +69,6 @@ static void _Draw(void){
 	else if(speed < 100) G8Lib_SetCursor(91, 21);
 	else G8Lib_SetCursor(87, 21);
 	G8Lib_Print(GFX8_ADAPTIVE, "%d", speed);
-
-	rpm = 1222;
 
 	G8Lib_SetFont(font_6x8);
 	G8Lib_SetCursor(90, 40);
@@ -83,7 +79,6 @@ static void _Draw(void){
 	else if(rpm < 1000) G8Lib_SetCursor(87, 46);
 	else G8Lib_SetCursor(83, 46);
 	G8Lib_Print(GFX8_ADAPTIVE, "%d", rpm);
-
 
 	G8Lib_GetDisplayDrv()->draw();
 }

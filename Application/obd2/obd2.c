@@ -154,6 +154,7 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 
 	switch (pid) {
 		case PID_RPM: rpm = value; break;
+		case PID_SPEED: speed = value; break;
 		case PID_COOLANT_TEMP: coolant_temp = value; break;
 		case PID_INTAKE_TEMP: intake_temp = value; break;
 		case PID_INTAKE_MAP: intake_map = value; break;
