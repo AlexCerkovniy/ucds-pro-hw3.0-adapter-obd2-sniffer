@@ -29,5 +29,6 @@ void obd2_init(void);
 void obd2_set_refresh_rate(uint32_t ticks);
 void obd2_main(void);
 void obd2_tick(uint32_t period);
+void obd2_rx_packet(uint8_t packet[], uint8_t len);
 int16_t obd2_parse_packet(uint8_t packet[], uint8_t len);
 obd2_status_t obd2_request_pid(uint8_t pid);
