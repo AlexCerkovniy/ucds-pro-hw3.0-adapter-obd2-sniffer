@@ -33,6 +33,10 @@ int16_t speed = 0;
 int16_t fuel_level = 0;
 int16_t engine_load = 0;
 
+uint8_t rx_packet[8];
+uint8_t rx_length = 0;
+bool packet_available = false;
+
 void obd2_init(void){
 
 }
@@ -50,9 +54,18 @@ void obd2_main(void){
 		return;
 	}
 
+	if(packet_available){
+		obd2_parse_packet(rx_packet, rx_length);
+		packet_available = false;
+	}
+
 	if(pid_request_timer == 0){
 		if(obd2_request_pid(obd2_list.pids_list[pid_request_index]) == OBD_OK){
 			pid_request_timer = pid_refresh_ticks;
+			pid_request_index++;
+					if(pid_request_index >= obd2_list.size){
+						pid_request_index = 0;
+					}
 		}
 	}
 }
@@ -63,8 +76,17 @@ void obd2_tick(uint32_t period){
 	}
 }
 
-int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
-{
+void obd2_rx_packet(uint8_t packet[], uint8_t len){
+	if(packet_available){
+		return; /* Temporary ignore packet */
+	}
+
+	memcpy(rx_packet, packet, len);
+	rx_length = len;
+	packet_available = true;
+}
+
+int16_t obd2_parse_packet(uint8_t packet[], uint8_t len) {
 	//uint8_t length = RxData[0];
 	//uint8_t status = RxData[1];
 	uint16_t pid  = packet[2];
@@ -166,12 +188,12 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len)
 	}
 
 	/* Go to next index */
-	if(obd2_list.pids_list[pid_request_index] == pid){
-		pid_request_index++;
-		if(pid_request_index >= obd2_list.size){
-			pid_request_index = 0;
-		}
-	}
+//	if(obd2_list.pids_list[pid_request_index] == pid){
+//		pid_request_index++;
+//		if(pid_request_index >= obd2_list.size){
+//			pid_request_index = 0;
+//		}
+//	}
 
 	console_print("PID=%.2X VAL=%d\r\n", pid, value);
 

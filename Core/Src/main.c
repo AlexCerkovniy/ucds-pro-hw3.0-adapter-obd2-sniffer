@@ -157,7 +157,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   obd2_init();
-  obd2_set_refresh_rate(100);
+  obd2_set_refresh_rate(500);
 
   /* Initialize ST7565 display */
 	G8Lib_Init(&st7565_driver);

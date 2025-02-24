@@ -48,7 +48,7 @@ void MX_CAN2_Init(void)
   hcan2.Init.TimeSeg2 = CAN_BS2_1TQ;
   hcan2.Init.TimeTriggeredMode = DISABLE;
   hcan2.Init.AutoBusOff = DISABLE;
-  hcan2.Init.AutoWakeUp = ENABLE;
+  hcan2.Init.AutoWakeUp = DISABLE;
   hcan2.Init.AutoRetransmission = DISABLE;
   hcan2.Init.ReceiveFifoLocked = DISABLE;
   hcan2.Init.TransmitFifoPriority = DISABLE;
@@ -166,13 +166,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxHeader, RxData);
 	Can_LedBlinkOnPacketReceived();
 
-	console_print("%.8lu RX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
-				HAL_GetTick(), RxHeader.StdId, RxHeader.DLC,
-				RxData[0], RxData[1], RxData[2], RxData[3], RxData[4], RxData[5], RxData[6], RxData[7]);
+//	console_print("%.8lu RX: ID=0x%X DLC=%lu %.2X %.2X %.2X %.2X %.2X %.2X %.2X %.2X\r\n",
+//				HAL_GetTick(), RxHeader.StdId, RxHeader.DLC,
+//				RxData[0], RxData[1], RxData[2], RxData[3], RxData[4], RxData[5], RxData[6], RxData[7]);
 
 	// Check Engine Response ID
-	if (RxHeader.StdId == 0x7E8) {
-		obd2_parse_packet(RxData, GET_SIZE(RxData));
+	if (RxHeader.StdId == 0x7E8 || RxHeader.StdId == 0x7E9) {
+		obd2_rx_packet(RxData, GET_SIZE(RxData));
 	}
 }
 
