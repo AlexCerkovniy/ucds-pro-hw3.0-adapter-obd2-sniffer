@@ -9,11 +9,8 @@ extern CAN_HandleTypeDef hcan2; // CAN Data Transmit Setup
 uint8_t pids_list[] = {
 		PID_COOLANT_TEMP,
 		PID_INTAKE_TEMP,
-		PID_INTAKE_MAP,
-		PID_RPM,
 		PID_SPEED,
-		PID_FUEL_LEVEL,
-		PID_ENGINE_LOAD
+		PID_FUEL_LEVEL
 };
 
 obd2_pids_list_t obd2_list = {
@@ -23,15 +20,12 @@ obd2_pids_list_t obd2_list = {
 
 uint8_t pid_request_index = 0;
 uint32_t pid_request_timer = 0;
-uint32_t pid_refresh_ticks = 250;
+uint32_t pid_refresh_ticks = 100;
 
 int16_t coolant_temp = 0;
 int16_t intake_temp = 0;
-int16_t intake_map = 0;
-int16_t rpm = 0;
 int16_t speed = 0;
 int16_t fuel_level = 0;
-int16_t engine_load = 0;
 
 uint8_t rx_packet[8];
 uint8_t rx_length = 0;
@@ -63,9 +57,9 @@ void obd2_main(void){
 		if(obd2_request_pid(obd2_list.pids_list[pid_request_index]) == OBD_OK){
 			pid_request_timer = pid_refresh_ticks;
 			pid_request_index++;
-					if(pid_request_index >= obd2_list.size){
-						pid_request_index = 0;
-					}
+			if(pid_request_index >= obd2_list.size){
+				pid_request_index = 0;
+			}
 		}
 	}
 }
@@ -175,25 +169,25 @@ int16_t obd2_parse_packet(uint8_t packet[], uint8_t len) {
 	}
 
 	switch (pid) {
-		case PID_RPM: rpm = value; break;
+		//case PID_RPM: rpm = value; break;
 		case PID_SPEED: speed = value; break;
 		case PID_COOLANT_TEMP: coolant_temp = value; break;
 		case PID_INTAKE_TEMP: intake_temp = value; break;
-		case PID_INTAKE_MAP: intake_map = value; break;
+		//case PID_INTAKE_MAP: intake_map = value; break;
 		case PID_FUEL_LEVEL: fuel_level = value; break;
-		case PID_ENGINE_LOAD: engine_load = value; break;
+		//case PID_ENGINE_LOAD: engine_load = value; break;
 
 		default:
 			break;
 	}
 
 	/* Go to next index */
-//	if(obd2_list.pids_list[pid_request_index] == pid){
-//		pid_request_index++;
-//		if(pid_request_index >= obd2_list.size){
-//			pid_request_index = 0;
-//		}
-//	}
+	if(obd2_list.pids_list[pid_request_index] == pid){
+		pid_request_index++;
+		if(pid_request_index >= obd2_list.size){
+			pid_request_index = 0;
+		}
+	}
 
 	console_print("PID=%.2X VAL=%d\r\n", pid, value);
 

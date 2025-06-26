@@ -29,5 +29,5 @@ void SCREEN_Main(void);
 void SCREEN_Tick(uint16_t milliseconds);
 void SCREEN_Set(screen_object_t *screen);
 screen_object_t *SCREEN_Get(void);
-void SCREEN_Invalidate(void);
+void SCREEN_Refresh(void);
 void SCREEN_SendData(uint8_t type, void *data);

@@ -3,7 +3,7 @@
 screen_object_t *last_screen = NULL;
 screen_object_t *current_screen = NULL;
 screen_object_t *new_screen = NULL;
-bool invalidate = false;
+bool refresh = false;
 
 void SCREEN_Init(void){
 
@@ -17,8 +17,8 @@ screen_object_t *SCREEN_Get(void){
 	return current_screen;
 }
 
-void SCREEN_Invalidate(void){
-    invalidate = true;
+void SCREEN_Refresh(void){
+	refresh = true;
 }
 
 void SCREEN_Main(void){
@@ -26,7 +26,7 @@ void SCREEN_Main(void){
 		last_screen = current_screen;
 		current_screen = new_screen;
 		new_screen = NULL;
-		invalidate = true;
+		refresh = true;
 
 		if(current_screen->prepare_draw){
 			current_screen->prepare_draw();
@@ -34,10 +34,10 @@ void SCREEN_Main(void){
 	}
 
     if(current_screen){
-        if(invalidate){
+        if(refresh){
             if(current_screen->draw){
                 current_screen->draw();
-                invalidate = false;
+                refresh = false;
             }
         }
     }
@@ -54,7 +54,7 @@ void SCREEN_SendData(uint8_t type, void *data){
             }
 
             current_screen->data(type, data);
-            invalidate = true;
+            refresh = true;
         }
     }
 }

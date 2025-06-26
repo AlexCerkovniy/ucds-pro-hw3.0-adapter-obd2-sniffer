@@ -18,23 +18,33 @@ void console_init(void){
 }
 
 void console_print(char *fmt, ...){
-  char buffer[256];
-  size_t length;
+//  char buffer[256];
+//  size_t length;
+//
+//  va_list args;
+//  va_start(args, fmt);
+//  length = vsprintf(buffer, fmt, args);
+//  va_end(args);
+//
+//  if(length){
+//	__disable_irq();
+//	fast_fifo_write(&my_fifo, (uint8_t *)buffer, length);
+//	__enable_irq();
+//  }
+}
 
-  va_list args;
-  va_start(args, fmt);
-  length = vsprintf(buffer, fmt, args);
-  va_end(args);
+void console_string(char *string){
+	size_t length = strlen(string);
 
-  if(length){
-	__disable_irq();
-	fast_fifo_write(&my_fifo, (uint8_t *)buffer, length);
-	__enable_irq();
-  }
+	if(length){
+		__disable_irq();
+		fast_fifo_write(&my_fifo, (uint8_t *)string, length);
+		__enable_irq();
+	}
 }
 
 void console_input(uint8_t *buffer, uint32_t length){
-	int value = atoi(buffer);
+	int value = atoi((const char *)buffer);
 
 	if(value){
 		if(value > 255){

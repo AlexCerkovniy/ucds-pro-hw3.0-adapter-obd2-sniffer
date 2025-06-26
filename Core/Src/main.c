@@ -27,7 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lawicel_can.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,6 +68,8 @@ gfx8_display_driver_t st7565_driver = {
 		.sleep = ST7565_Sleep
 };
 
+ecu_data_t ecu = {0};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -106,7 +108,7 @@ void Can_LedBlinkOnPacketReceived(void){
 		return;
 	}
 
-	can_packet_rx_led_timer = 50;
+	can_packet_rx_led_timer = 5;
 	LED_GREEN_ON();
 }
 
@@ -183,7 +185,7 @@ int main(void)
 	  if(battery_voltage_update_timer == 0){
 		  battery_voltage_update_timer = BATTERY_VOLTAGE_UPDATE_PERIOD;
 		  adc_measure(ADC_VEHICLE_VOLTAGE, &battery_voltage_mv);
-		  SCREEN_Invalidate();
+		  SCREEN_Refresh();
 	  }
 
 	  if(pid_to_request){

@@ -78,7 +78,7 @@ void MX_ADC1_Init(void)
   LL_ADC_Enable(ADC1);
   HAL_Delay(2);
   LL_ADC_StartCalibration(ADC1);
-  while(LL_ADC_IsCalibrationOnGoing(ADC1));
+  while(LL_ADC_IsCalibrationOnGoing(ADC1)){};
 
   /* Measure reference voltage at start */
 	if(adc_measure(ADC_VREF_MV, &vref_mv) != 0){

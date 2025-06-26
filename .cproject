@@ -55,6 +55,7 @@
 									<listOptionValue builtIn="false" value="../Application/obd2"/>
 									<listOptionValue builtIn="false" value="../Application/console"/>
 									<listOptionValue builtIn="false" value="../Application/fast_fifo"/>
+									<listOptionValue builtIn="false" value="../Application/lawicel_can"/>
 									<listOptionValue builtIn="false" value="../libraries/displays/gfx8lib"/>
 									<listOptionValue builtIn="false" value="../libraries/displays/st7565"/>
 									<listOptionValue builtIn="false" value="../Application/screen"/>

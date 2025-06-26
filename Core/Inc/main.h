@@ -44,6 +44,7 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "gpio.h"
+#include "can.h"
 #include "console.h"
 #include "obd2.h"
 #include "fast_fifo.h"
@@ -55,7 +56,19 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+typedef struct {
+	uint16_t speed_kmh;
+	int16_t coolant_c;
+	int16_t boost_bar;
+	int16_t oil_temp;
+	int16_t oil_pressure_bar;
+	int16_t rpm;
+	int16_t ptu_c; //Power transfer unit temperature
+	int16_t intake_c;
+	int16_t ambient_c;
+} ecu_data_t;
 
+extern ecu_data_t ecu;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
