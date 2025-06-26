@@ -227,14 +227,14 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		ecu.speed_kmh = ((uint16_t)RxData[6] * 256 + RxData[7]) / 100;
 	}
 	else if(RxHeader.StdId == 0x2F0){
-		ecu.coolant_c = (int16_t)((RxData[5] & 0x03) * 256 + RxData[6]) - 60;
-		ecu.intake_c = (int16_t)((RxData[3] & 0x03) * 256 + RxData[4]) - 60;
+		ecu.coolant_c = (int16_t)RxData[5] - 60;
+		ecu.intake_c = (((int16_t)(RxData[6] & 0x03) * 256 + RxData[7]) - 127) / 4; //wrong
 	}
 	else if(RxHeader.StdId == 0x340){
 		ecu.ambient_c = (int16_t)RxData[7] - 60;
 	}
 	else if(RxHeader.StdId == 0x380){
-		ecu.fuel = (((uint16_t)(RxData[2] & 0x03) * 256) + RxData[3]) / 100;
+		ecu.fuel = (uint16_t)RxData[0] * 100 / 255;
 	}
 }
 
