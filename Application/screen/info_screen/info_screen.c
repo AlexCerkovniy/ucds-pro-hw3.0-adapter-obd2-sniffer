@@ -58,7 +58,7 @@ static void _Draw(void){
 	G8Lib_Print(GFX8_ADAPTIVE, "BST:%d.%.2dBar", ecu.boost_bar / 100, ecu.boost_bar % 100);
 
 	G8Lib_SetCursor(2, 54);
-	G8Lib_Print(GFX8_ADAPTIVE, "FUEL:%d%%", fuel_level);
+	G8Lib_Print(GFX8_ADAPTIVE, "FUEL:%d%%/%d%%", fuel_level, ecu.fuel);
 
 	G8Lib_SetFont(font_6x8);
 	G8Lib_SetCursor(64, 24);

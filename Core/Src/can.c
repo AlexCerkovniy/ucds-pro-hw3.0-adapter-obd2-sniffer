@@ -233,6 +233,9 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	else if(RxHeader.StdId == 0x340){
 		ecu.ambient_c = (int16_t)RxData[7] - 60;
 	}
+	else if(RxHeader.StdId == 0x380){
+		ecu.fuel = (((uint16_t)(RxData[2] & 0x03) * 256) + RxData[3]) / 100;
+	}
 }
 
 void HAL_CAN_RxFifo0FullCallback(CAN_HandleTypeDef *hcan){

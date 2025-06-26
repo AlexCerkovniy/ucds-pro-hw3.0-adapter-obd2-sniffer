@@ -66,6 +66,7 @@ typedef struct {
 	int16_t ptu_c; //Power transfer unit temperature
 	int16_t intake_c;
 	int16_t ambient_c;
+	uint16_t fuel;
 } ecu_data_t;
 
 extern ecu_data_t ecu;
