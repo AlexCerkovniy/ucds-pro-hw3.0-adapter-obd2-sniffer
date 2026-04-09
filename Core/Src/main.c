@@ -158,17 +158,17 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
-  obd2_init();
-  obd2_set_refresh_rate(500);
-
-  /* Initialize ST7565 display */
-	G8Lib_Init(&st7565_driver);
-	G8Lib_GetDisplayDrv()->set_backlight(false);
-	G8Lib_GetDisplayDrv()->sleep(false);
-
-	/* Start graphic application */
-	SCREEN_Init();
-	SCREEN_Set(&logo_screen);
+//  obd2_init();
+//  obd2_set_refresh_rate(500);
+//
+//  /* Initialize ST7565 display */
+//	G8Lib_Init(&st7565_driver);
+//	G8Lib_GetDisplayDrv()->set_backlight(false);
+//	G8Lib_GetDisplayDrv()->sleep(false);
+//
+//	/* Start graphic application */
+//	SCREEN_Init();
+//	SCREEN_Set(&logo_screen);
 
 	adc_measure(ADC_TEMPERATURE_C, &temperature);
 	adc_measure(ADC_VEHICLE_VOLTAGE, &battery_voltage_mv);
@@ -185,16 +185,16 @@ int main(void)
 	  if(battery_voltage_update_timer == 0){
 		  battery_voltage_update_timer = BATTERY_VOLTAGE_UPDATE_PERIOD;
 		  adc_measure(ADC_VEHICLE_VOLTAGE, &battery_voltage_mv);
-		  SCREEN_Refresh();
+		  //SCREEN_Refresh();
 	  }
 
-	  if(pid_to_request){
-		  pid_to_request = 0;
-		  obd2_request_pid(pid_to_request);
-	  }
-
-	  obd2_main();
-	  SCREEN_Main();
+//	  if(pid_to_request){
+//		  pid_to_request = 0;
+//		  obd2_request_pid(pid_to_request);
+//	  }
+//
+//	  obd2_main();
+//	  SCREEN_Main();
 	  console_main();
 	  HAL_IWDG_Refresh(&hiwdg);
   }

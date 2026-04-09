@@ -18,19 +18,19 @@ void console_init(void){
 }
 
 void console_print(char *fmt, ...){
-//  char buffer[256];
-//  size_t length;
-//
-//  va_list args;
-//  va_start(args, fmt);
-//  length = vsprintf(buffer, fmt, args);
-//  va_end(args);
-//
-//  if(length){
-//	__disable_irq();
-//	fast_fifo_write(&my_fifo, (uint8_t *)buffer, length);
-//	__enable_irq();
-//  }
+  char buffer[256];
+  size_t length;
+
+  va_list args;
+  va_start(args, fmt);
+  length = vsprintf(buffer, fmt, args);
+  va_end(args);
+
+  if(length){
+	__disable_irq();
+	fast_fifo_write(&my_fifo, (uint8_t *)buffer, length);
+	__enable_irq();
+  }
 }
 
 void console_string(char *string){
